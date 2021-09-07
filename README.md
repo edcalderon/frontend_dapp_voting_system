@@ -2,14 +2,6 @@
 
 - Keep Strapi running, or restart Strapi with either `yarn dev` or `yarn start`.
 
-(**NOTE:** You will not be able to test making an order unless you have configured your [Stripe Token](https://stripe.com/docs/stripe-js/elements/payment-request-button#using-with-connect), **pk_test** token. Search and replace **pk_test_stripe** with your Stripe API token found in the ./pages/checkout.vue file.)
-
-- Open another terminal window and navigate to `Path: ./Projects/strapi-examples/nuxt-strapi-deliveroo-clone-tutorial`.
-
-```
-cd client
-yarn
-```
 
 If you would like to serve in development mode with hot reloading on [http://localhost:3000](http://localhost:3000).
 
