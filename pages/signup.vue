@@ -3,7 +3,7 @@
     <div class="col-md-6 offset-md-3 mt-3">
       <form autocomplete="off" @submit.stop.prevent="handleSubmit">
         <div class="form-group">
-          <label for="email">Document ID</label>
+          <label for="email">Document CC</label>
           <b-form-input
             id="usercc"
             v-model="usercc"
@@ -25,15 +25,14 @@
           />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Expedition date CC</label>
           <b-form-input
             id="password"
             :autofocus="true"
             v-model="password"
-            label="password"
-            type="password"
+            label="Expedition date"
             class="form-control"
-            placeholder="Enter your password"
+            placeholder="24/12/1970"
             required
           />
         </div>
@@ -78,13 +77,12 @@ export default {
             userCC: this.usercc,
             username: this.email,
             email: this.email,
-            password: this.password
+            password: this.password.toString()
           }
         )
-        if (response) {
-          this.loading = false
-          this.setUser(response.data.user)
-          this.setJwt(response.data.jwt)
+        if (response.data.user && response.data.jwt) {
+          this.setUser(JSON.stringify(response.data.user))
+          this.setJwt(JSON.stringify(response.data.jwt))
           this.$router.push('/')
         }
       } catch (err) {

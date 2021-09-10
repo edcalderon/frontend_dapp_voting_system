@@ -54,7 +54,6 @@ export default {
       return this.$store.getters['auth/jwt']
     },
     async handleSubmit() {
-      console.log(this.userToken())
       this.loading = true
       const config = {
         headers: { Authorization: `Bearer ` + this.userToken() }
@@ -70,7 +69,6 @@ export default {
           config
         )
         if (response) {
-          console.log(response)
           alert('Proposal have been successfully created.')
           this.loading = false
           this.$store.commit('proposals/add', {

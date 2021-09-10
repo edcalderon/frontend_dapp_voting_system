@@ -19,11 +19,17 @@ export const mutations = {
 }
 
 export const getters = {
+  user: state => {
+    return state.user
+  },
   username: state => {
     return state.user && state.user.username
   },
+  userWallet: state => {
+    return state.user && state.user.wallet
+  },
   roll: state => {
-    return state.user && state.user.role.name
+    return state.user.role && state.user.role.name
   },
   jwt: state => {
     return state.jwt && state.jwt

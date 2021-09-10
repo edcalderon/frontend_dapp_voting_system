@@ -63,9 +63,11 @@ export default {
         this.loading = true
         const response = await strapi.login(this.email, this.password)
         this.loading = false
-        this.setUser(response.user)
-        this.setJwt(response.jwt)
-        this.$router.push('/')
+        if (response.user && response.jwt) {
+          this.setUser(JSON.stringify(response.user))
+          this.setJwt(JSON.stringify(response.jwt))
+          this.$router.push('/')
+        }
       } catch (err) {
         this.loading = false
         alert(err.message || 'An error occurred.')

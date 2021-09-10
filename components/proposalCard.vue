@@ -14,34 +14,35 @@
         <div class="card-body">
           <h5 class="card-title">{{ proposal.name }}</h5>
           <p class="card-text">
-            {{ proposal.description || 'No description provided' }}.
+            {{ proposal.description || 'No description provided' }}
           </p>
-          <router-link
-            :to="{
-              name: '',
-              params: { id: proposal.id }
-            }"
-            tag="a"
-            class="btn btn-primary"
-          >
+          <p v-if="userRole == 'admin'" class="card-text">
+            {{ 'voteCount: ' + proposal.voteCount || 'VoteCount' }}
+          </p>
+          <b-button v-b-modal.modal-vote variant="primary">
             vote
-          </router-link>
+          </b-button>
           <b-button
+            v-b-modal.modal-delete
             v-if="userRole == 'admin'"
             variant="danger"
-            @click="deleteProposal(proposal.id)"
           >
             Delete
           </b-button>
         </div>
+        <modal-vote :prop-id="proposal.id" />
+        <delete-proposal-modal :prop-id="proposal.id" />
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import DeleteProposalModal from './deleteProposalModal.vue'
+import modalVote from './voteModal.vue'
 const apiUrl = process.env.API_URL || 'http://localhost:1337'
 export default {
+  components: { modalVote, DeleteProposalModal },
   data() {
     return {
       query: '',
@@ -65,9 +66,6 @@ export default {
     this.fetchProposals()
   },
   methods: {
-    userToken() {
-      return this.$store.getters['auth/jwt']
-    },
     async fetchProposals() {
       this.$store.commit('proposals/emptyList')
       const response = await this.$axios.get(apiUrl + '/proposals')
@@ -79,19 +77,6 @@ export default {
             ...proposal
           })
         })
-        return true
-      }
-    },
-    async deleteProposal(id) {
-      const response = await this.$axios.delete(apiUrl + '/proposals/' + id)
-      if (response) {
-        console.log(response)
-        this.$store.commit('proposals/remove', {
-          id: response.data.id,
-          ...response.data
-        })
-        this.fetchProposals()
-        alert('Proposal have been successfully deleted.')
         return true
       }
     }
