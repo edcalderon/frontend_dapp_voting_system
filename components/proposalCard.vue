@@ -11,7 +11,6 @@
     <b-form-checkbox-group
       id="checkbox-group-2"
       v-model="selectedProposals"
-      :aria-describedby="ariaDescribedby"
       name="flavour-2"
     >
       <ul v-if="proposals" class="card-columns list-unstyled">
@@ -49,7 +48,7 @@
         </li>
       </ul>
     </b-form-checkbox-group>
-    <modal-vote :selected-proposals="selectedProposals" />
+    <vote-proposal-modal :selected-proposals="selectedProposals" />
     <b-button v-b-modal="'voteModal'" variant="primary">
       vote
     </b-button>
@@ -60,11 +59,11 @@
 </template>
 
 <script>
-import DeleteProposalModal from './deleteProposalModal.vue'
-import modalVote from './voteModal.vue'
+import deleteProposalModal from './deleteProposalModal.vue'
+import voteProposalModal from './voteProposalModal.vue'
 const apiUrl = process.env.API_URL || 'http://localhost:1337'
 export default {
-  components: { modalVote, DeleteProposalModal },
+  components: { voteProposalModal, deleteProposalModal },
   data() {
     return {
       query: '',
@@ -82,7 +81,7 @@ export default {
       return this.$store.getters['proposals/list']
     },
     userRole() {
-      return this.$store.getters['auth/roll']
+      return this.$store.getters['auth/userRoll']
     }
   },
   created() {

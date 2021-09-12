@@ -2,9 +2,15 @@ export const state = () => ({
   list: []
 })
 
+/* function arrayFilter(arr, value) {
+  return arr.filter(function(ele) {
+    return ele == value
+  })
+} */
+
 export const mutations = {
-  add(state, dish) {
-    state.list.push(dish)
+  add(state, candidate) {
+    state.list.push(candidate)
   },
   emptyList(state) {
     state.list = []

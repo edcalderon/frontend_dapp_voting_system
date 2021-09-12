@@ -81,6 +81,7 @@ export default {
           }
         )
         if (response.data.user && response.data.jwt) {
+          console.log(response.data.user)
           this.setUser(JSON.stringify(response.data.user))
           this.setJwt(JSON.stringify(response.data.jwt))
           this.$router.push('/')

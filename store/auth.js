@@ -14,6 +14,7 @@ export const mutations = {
   logout(state) {
     state.user = null
     Cookies.set('user', null)
+    Cookies.set('jwt', null)
     this.$router.push('/signin')
   }
 }
@@ -31,8 +32,8 @@ export const getters = {
   userWallet: state => {
     return state.user && state.user.wallet
   },
-  roll: state => {
-    return state.user.role && state.user.role.name
+  userRoll: state => {
+    return state.user && state.user.role.name
   },
   jwt: state => {
     return state.jwt && state.jwt
