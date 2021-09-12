@@ -1,18 +1,23 @@
 <template>
   <div>
     <b-modal
-      :id="'voteModal' + propId"
-      :ref="'voteModal' + propId"
+      id="voteModal"
+      ref="voteModal"
       title="Confirm your vote"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>Are you sure to vote fot the proposal: {{ propName }}?</p>
+      <p>You are about to vote for this proposals:</p>
+      <ul class="card-columns list-unstyled">
+        <li v-for="proposal in selectedProposals" :key="proposal.proposalId">
+          {{ proposal.proposalName }}
+        </li>
+      </ul>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           :state="dateState"
-          label="Confirm c.c expiration date"
+          label="To vote please confirm your expiration date cc"
           label-for="date-input"
           invalid-feedback="Date is required"
         >
@@ -33,13 +38,9 @@
 const apiUrl = process.env.API_URL || 'http://localhost:1337'
 export default {
   props: {
-    propId: {
-      type: String,
-      default: ''
-    },
-    propName: {
-      type: String,
-      default: ''
+    selectedProposals: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -86,14 +87,13 @@ export default {
     },
     handleSubmit() {
       // Exit when the form isn't valid
-      console.log(this.propId)
       if (!this.checkFormValidity()) {
         return
       }
       this.$nextTick(() => {
         try {
           this.loading = true
-          this.voteProposal(this.propId, this.userId(), this.date).then(
+          this.vote(this.selectedProposals, this.userId(), this.date).then(
             this.$bvModal.hide('modal-vote')
           )
         } catch (err) {
@@ -116,19 +116,19 @@ export default {
         return true
       }
     },
-    async voteProposal(proposalId, userId, sendPassword) {
+    async vote(selectedProposals, userId, sendPassword) {
       const config = {
         headers: { Authorization: `Bearer ` + this.userToken() }
       }
       const body = {
         userId: userId,
         wallet: this.userWallet(),
-        proposalId: proposalId,
+        selectedProposals: selectedProposals,
         sendPassword: sendPassword
       }
       try {
         const response = await this.$axios.post(
-          apiUrl + '/proposals/vote/' + proposalId,
+          apiUrl + '/proposals/vote',
           body,
           config
         )

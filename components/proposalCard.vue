@@ -8,35 +8,54 @@
         placeholder="Search..."
       />
     </div>
-    <ul v-if="proposals" class="card-columns list-unstyled">
-      <li v-for="proposal in filteredList" :key="proposal.id" class="card">
-        <!-- <img :src="restaurant.image.url" class="card-img-top" /> -->
-        <div class="card-body">
-          <h5 class="card-title">{{ proposal.name }}</h5>
-          <p class="card-text">
-            {{ proposal.description || 'No description provided' }}
-          </p>
-          <p v-if="userRole == 'admin'" class="card-text">
-            {{ 'voteCount: ' + proposal.voteCount || 'VoteCount' }}
-          </p>
-          <b-button v-b-modal="'voteModal' + proposal.id" variant="primary">
-            vote
-          </b-button>
-          <b-button
-            v-b-modal="'deleteModal' + proposal.id"
-            v-if="userRole == 'admin'"
-            variant="danger"
-          >
-            Delete
-          </b-button>
-        </div>
-        <modal-vote :prop-id="proposal.id" :prop-name="proposal.name" />
-        <delete-proposal-modal
-          :prop-id="proposal.id"
-          :prop-name="proposal.name"
-        />
-      </li>
-    </ul>
+    <b-form-checkbox-group
+      id="checkbox-group-2"
+      v-model="selectedProposals"
+      :aria-describedby="ariaDescribedby"
+      name="flavour-2"
+    >
+      <ul v-if="proposals" class="card-columns list-unstyled">
+        <li v-for="proposal in filteredList" :key="proposal.id" class="card">
+          <!-- <img :src="restaurant.image.url" class="card-img-top" /> -->
+          <div class="card-body">
+            <h5 class="card-title">{{ proposal.name }}</h5>
+            <p class="card-text">
+              {{ proposal.description || 'No description provided' }}
+            </p>
+            <b-form-checkbox
+              :value="{
+                proposalId: proposal.id,
+                proposalName: proposal.name,
+                blockchainId: proposal.blockchainId
+              }"
+              size="lg"
+            />
+            Vote!
+            <p v-if="userRole == 'admin'" class="card-text">
+              {{ 'voteCount: ' + proposal.voteCount || 'VoteCount' }}
+            </p>
+            <b-button
+              v-b-modal="'deleteModal' + proposal.id"
+              v-if="userRole == 'admin'"
+              variant="danger"
+            >
+              Delete
+            </b-button>
+          </div>
+          <delete-proposal-modal
+            :prop-id="proposal.id"
+            :prop-name="proposal.name"
+          />
+        </li>
+      </ul>
+    </b-form-checkbox-group>
+    <modal-vote :selected-proposals="selectedProposals" />
+    <b-button v-b-modal="'voteModal'" variant="primary">
+      vote
+    </b-button>
+    <div>
+      Selected proposals: <strong>{{ selectedProposals }}</strong>
+    </div>
   </div>
 </template>
 
@@ -49,7 +68,8 @@ export default {
   data() {
     return {
       query: '',
-      responsed: false
+      responsed: false,
+      selectedProposals: []
     }
   },
   computed: {
