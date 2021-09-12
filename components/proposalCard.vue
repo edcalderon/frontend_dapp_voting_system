@@ -19,19 +19,22 @@
           <p v-if="userRole == 'admin'" class="card-text">
             {{ 'voteCount: ' + proposal.voteCount || 'VoteCount' }}
           </p>
-          <b-button v-b-modal.modal-vote variant="primary">
+          <b-button v-b-modal="'voteModal' + proposal.id" variant="primary">
             vote
           </b-button>
           <b-button
-            v-b-modal.modal-delete
+            v-b-modal="'deleteModal' + proposal.id"
             v-if="userRole == 'admin'"
             variant="danger"
           >
             Delete
           </b-button>
         </div>
-        <modal-vote :prop-id="proposal.id" />
-        <delete-proposal-modal :prop-id="proposal.id" />
+        <modal-vote :prop-id="proposal.id" :prop-name="proposal.name" />
+        <delete-proposal-modal
+          :prop-id="proposal.id"
+          :prop-name="proposal.name"
+        />
       </li>
     </ul>
   </div>

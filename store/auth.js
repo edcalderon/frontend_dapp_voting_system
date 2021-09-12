@@ -22,6 +22,9 @@ export const getters = {
   user: state => {
     return state.user
   },
+  userId: state => {
+    return state.user && state.user._id
+  },
   username: state => {
     return state.user && state.user.username
   },

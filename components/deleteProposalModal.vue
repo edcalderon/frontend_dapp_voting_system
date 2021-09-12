@@ -1,16 +1,14 @@
 <template>
   <div>
     <b-modal
-      id="modal-delete"
-      ref="modal"
+      :id="'deleteModal' + propId"
+      :ref="'deleteModal' + propId"
       title="Warning!"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>
-        are you sure to delete this proposal?
-      </p>
+      <p>Are you sure to delete the proposal {{ propName }}?</p>
     </b-modal>
   </div>
 </template>
@@ -20,6 +18,10 @@ const apiUrl = process.env.API_URL || 'http://localhost:1337'
 export default {
   props: {
     propId: {
+      type: String,
+      default: ''
+    },
+    propName: {
       type: String,
       default: ''
     }

@@ -1,17 +1,18 @@
 <template>
   <div>
     <b-modal
-      id="modal-vote"
-      ref="modal"
+      :id="'voteModal' + propId"
+      :ref="'voteModal' + propId"
       title="Confirm your vote"
       @show="resetModal"
       @hidden="resetModal"
       @ok="handleOk"
     >
+      <p>Are you sure to vote fot the proposal: {{ propName }}?</p>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           :state="dateState"
-          label="expiration date cc"
+          label="Confirm c.c expiration date"
           label-for="date-input"
           invalid-feedback="Date is required"
         >
@@ -35,6 +36,10 @@ export default {
     propId: {
       type: String,
       default: ''
+    },
+    propName: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -46,6 +51,9 @@ export default {
   methods: {
     userWallet() {
       return this.$store.getters['auth/userWallet']
+    },
+    userId() {
+      return this.$store.getters['auth/userId']
     },
     userToken() {
       return this.$store.getters['auth/jwt']
@@ -73,21 +81,21 @@ export default {
       this.dateState = null
     },
     handleOk(bvModalEvt) {
-      // Prevent modal from closing
       bvModalEvt.preventDefault()
-      // Trigger submit handler
       this.handleSubmit()
     },
     handleSubmit() {
       // Exit when the form isn't valid
+      console.log(this.propId)
       if (!this.checkFormValidity()) {
         return
       }
-      // Hide the modal manually
       this.$nextTick(() => {
         try {
           this.loading = true
-          this.fetchAndVote().then(this.$bvModal.hide('modal-vote'))
+          this.voteProposal(this.propId, this.userId(), this.date).then(
+            this.$bvModal.hide('modal-vote')
+          )
         } catch (err) {
           this.loading = false
           alert('An error occurred.')
@@ -108,27 +116,30 @@ export default {
         return true
       }
     },
-    async fetchAndVote() {
-      const voteCount = await this.getProposalVoteCount()
-      this.voteProposal(this.propId, voteCount)
-    },
-    async voteProposal(id, voteCount) {
-      console.log(voteCount)
+    async voteProposal(proposalId, userId, sendPassword) {
       const config = {
         headers: { Authorization: `Bearer ` + this.userToken() }
       }
       const body = {
-        voteCount: parseInt(voteCount) + 1
+        userId: userId,
+        wallet: this.userWallet(),
+        proposalId: proposalId,
+        sendPassword: sendPassword
       }
       try {
-        const response = await this.$axios.put(
-          apiUrl + '/proposals/' + id,
+        const response = await this.$axios.post(
+          apiUrl + '/proposals/vote/' + proposalId,
           body,
           config
         )
-        if (response) {
+        if (response.data.status == 200) {
           this.fetchProposals()
           alert('You have been vote successfully.')
+          this.loading = false
+          return true
+        }
+        if (response.data.status == 403) {
+          alert('Dates do not match.')
           this.loading = false
           return true
         }
