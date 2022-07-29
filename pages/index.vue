@@ -56,13 +56,14 @@ export default {
   },
   computed: {
     userRole() {
-      return this.$store.getters['auth/userRoll']
+      return this.$store.getters['auth/roll']
     }
   },
   mounted() {
     mapMutations({
       getUser: 'auth/user',
-      getJwt: 'auth/jwt'
+      getJwt: 'auth/jwt',
+      getRoll: 'auth/roll'
     })
   }
 }

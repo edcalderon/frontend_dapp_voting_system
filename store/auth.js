@@ -15,7 +15,7 @@ export const mutations = {
     state.user = null
     Cookies.set('user', null)
     Cookies.set('jwt', null)
-    this.$router.push('/signin')
+    this.$router.push('/')
   }
 }
 
@@ -32,10 +32,10 @@ export const getters = {
   userWallet: state => {
     return state.user && state.user.wallet
   },
-  userRoll: state => {
-    return state.user && state.user.role.name
+  roll: state => {
+    return state.user && (state.user.role ? state.user.role.name : '')
   },
   jwt: state => {
-    return state.jwt && state.jwt
+    return state.jwt
   }
 }

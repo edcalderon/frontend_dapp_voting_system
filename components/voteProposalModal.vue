@@ -11,13 +11,13 @@
       <p>You are about to vote for this proposals:</p>
       <ul class="card-columns list-unstyled">
         <li v-for="proposal in selectedProposals" :key="proposal.proposalId">
-          {{ proposal.proposalName }}
+          {{ proposal ? proposal.proposalName : '' }}
         </li>
       </ul>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           :state="dateState"
-          label="To vote please confirm your expiration date cc"
+          label="To vote for proposals please confirm your CC/DNI expiration dat"
           label-for="date-input"
           invalid-feedback="Date is required"
         >
@@ -65,8 +65,7 @@ export default {
           apiUrl + '/proposals/' + this.propId
         )
         if (response) {
-          const voteCount = response.data.voteCount
-          return voteCount
+          return response.data.voteCount
         }
       } catch (err) {
         alert('An error occurred.')
@@ -107,7 +106,6 @@ export default {
       const response = await this.$axios.get(apiUrl + '/proposals')
       if (response) {
         response.data.forEach(proposal => {
-          // restaurant.image.url = `${apiUrl}${restaurant.image.url}`
           this.$store.commit('proposals/add', {
             id: proposal.id,
             ...proposal

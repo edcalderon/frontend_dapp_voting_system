@@ -2,6 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "private": true,
+  "author": {
+    "name": "edward@lealsystem.net"
+  },
   "scripts": {
     "dev": "nuxt",
     "develop": "nuxt",
@@ -30,5 +33,9 @@
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-vue": "^4.7.1",
     "prettier": "^1.14.3"
+  },
+  "engines": {
+    "node": ">=10.16.0 <=14.16.1",
+    "npm": "^6.0.0"
   }
 }

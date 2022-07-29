@@ -14,17 +14,6 @@
                 required
               />
             </div>
-            <!-- <div class="form-group">
-              <label for="postalCode">Description</label>
-              <b-form-textarea
-                id="description"
-                v-model="description"
-                placeholder="Enter some description..."
-                rows="3"
-                max-rows="6"
-                required
-              />
-            </div> -->
             <button
               :disabled="loading"
               type="submit"

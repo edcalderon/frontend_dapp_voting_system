@@ -3,13 +3,13 @@
     <div class="col-md-6 offset-md-3 mt-3">
       <form autocomplete="off" @submit.stop.prevent="handleSubmit">
         <div class="form-group">
-          <label for="email">Document CC</label>
+          <label for="email">Document Number CC/DNI</label>
           <b-form-input
             id="usercc"
             v-model="usercc"
             :autofocus="true"
             type="number"
-            placeholder="Enter your id"
+            placeholder="000000"
             required
           />
         </div>
@@ -46,7 +46,7 @@
         <p class="text-center mt-3">
           Already have an account?
           <router-link :to="{ name: 'signin' }" tag="a">
-            Login
+            Login Here
           </router-link>
         </p>
       </form>
@@ -81,14 +81,14 @@ export default {
           }
         )
         if (response.data.user && response.data.jwt) {
-          console.log(response.data.user)
           this.setUser(JSON.stringify(response.data.user))
           this.setJwt(JSON.stringify(response.data.jwt))
-          this.$router.push('/')
+          this.$router.push('/signin')
+          alert(`user ${response.data.user.email} registered successfully!`)
         }
       } catch (err) {
         this.loading = false
-        alert(err.message || 'An error occurred.')
+        alert(err.message + ' User already registered' || 'An error occurred.')
       }
     },
     ...mapMutations({

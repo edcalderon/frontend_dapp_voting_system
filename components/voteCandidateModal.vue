@@ -11,13 +11,13 @@
       <p>You are about to vote for this candidate:</p>
       <ul class="card-columns list-unstyled">
         {{
-          candidate.name
+          candidate ? candidate.name : ''
         }}
       </ul>
       <form ref="form" @submit.stop.prevent="handleSubmit">
         <b-form-group
           :state="dateState"
-          label="To vote please confirm your expiration date cc"
+          label="To vote for candidate please confirm your CC/DNI expiration date"
           label-for="date-input"
           invalid-feedback="Date is required"
         >
@@ -65,8 +65,7 @@ export default {
           apiUrl + '/candidate/' + this.candidate.id
         )
         if (response) {
-          const voteCount = response.data.voteCount
-          return voteCount
+          return response.data.voteCount
         }
       } catch (err) {
         alert('An error occurred.')
@@ -107,7 +106,6 @@ export default {
       const response = await this.$axios.get(apiUrl + '/candidates')
       if (response) {
         response.data.forEach(candidate => {
-          // restaurant.image.url = `${apiUrl}${restaurant.image.url}`
           this.$store.commit('candidates/add', {
             id: candidate.id,
             ...candidate

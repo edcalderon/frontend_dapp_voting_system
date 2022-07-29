@@ -10,12 +10,8 @@
     </div>
     <ul v-if="candidates" class="card-columns list-unstyled">
       <li v-for="candidate in filteredList" :key="candidate.id" class="card">
-        <!-- <img :src="restaurant.image.url" class="card-img-top" /> -->
         <div class="card-body">
           <h5 class="card-title">{{ candidate.name }}</h5>
-          <!-- <p class="card-text">
-            {{ candidate.description || 'No description provided' }}
-          </p> -->
           <b-button
             v-b-modal="'deleteCandidateModal' + candidate.id"
             v-if="userRole == 'admin'"
@@ -66,7 +62,7 @@ export default {
       return this.$store.getters['candidates/list']
     },
     userRole() {
-      return this.$store.getters['auth/userRoll']
+      return this.$store.getters['auth/roll']
     }
   },
   created() {

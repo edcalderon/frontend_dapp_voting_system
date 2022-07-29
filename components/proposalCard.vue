@@ -15,7 +15,6 @@
     >
       <ul v-if="proposals" class="card-columns list-unstyled">
         <li v-for="proposal in filteredList" :key="proposal.id" class="card">
-          <!-- <img :src="restaurant.image.url" class="card-img-top" /> -->
           <div class="card-body">
             <h5 class="card-title">{{ proposal.name }}</h5>
             <p class="card-text">
@@ -81,7 +80,7 @@ export default {
       return this.$store.getters['proposals/list']
     },
     userRole() {
-      return this.$store.getters['auth/userRoll']
+      return this.$store.getters['auth/roll']
     }
   },
   created() {
@@ -93,7 +92,6 @@ export default {
       const response = await this.$axios.get(apiUrl + '/proposals')
       if (response) {
         response.data.forEach(proposal => {
-          // restaurant.image.url = `${apiUrl}${restaurant.image.url}`
           this.$store.commit('proposals/add', {
             id: proposal.id,
             ...proposal

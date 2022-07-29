@@ -14,7 +14,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">Password / CC Exp Date</label>
           <b-form-input
             id="password"
             v-model="password"
@@ -34,9 +34,9 @@
           Submit
         </button>
         <p class="text-center mt-3">
-          No account yet
+          Not account yet?
           <router-link :to="{ name: 'signup' }" tag="a">
-            Register
+            Register Here
           </router-link>
         </p>
       </form>
@@ -70,7 +70,8 @@ export default {
         }
       } catch (err) {
         this.loading = false
-        alert(err.message || 'An error occurred.')
+        console.log(err)
+        alert('invalid credentials please try again')
       }
     },
     ...mapMutations({
