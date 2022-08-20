@@ -30,7 +30,7 @@
             />
             Vote!
             <p v-if="userRole == 'admin'" class="card-text">
-              {{ 'voteCount: ' + proposal.voteCount || 'VoteCount' }}
+              {{ 'voteCount: ' + proposal.voteCount / 100 || 'VoteCount' }}
             </p>
             <b-button
               v-b-modal="'deleteModal' + proposal.id"

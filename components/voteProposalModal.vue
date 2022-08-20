@@ -52,7 +52,7 @@ export default {
     return {
       date: '',
       dateState: null,
-      haveVoted: this.user().voteProposalState
+      haveVoted: this.user()?.voteProposalState
     }
   },
   methods: {
