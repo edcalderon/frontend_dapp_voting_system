@@ -8,28 +8,33 @@
       @hidden="resetModal"
       @ok="handleOk"
     >
-      <p>You are about to vote for this proposals:</p>
-      <ul class="card-columns list-unstyled">
-        <li v-for="proposal in selectedProposals" :key="proposal.proposalId">
-          {{ proposal ? proposal.proposalName : '' }}
-        </li>
-      </ul>
-      <form ref="form" @submit.stop.prevent="handleSubmit">
-        <b-form-group
-          :state="dateState"
-          label="To vote for proposals please confirm your CC/DNI expiration dat"
-          label-for="date-input"
-          invalid-feedback="Date is required"
-        >
-          <b-form-input
-            id="date-input"
-            v-model="date"
+      <div v-if="!haveVoted">
+        <p>You are about to vote for this proposals:</p>
+        <ul class="card-columns list-unstyled">
+          <li v-for="proposal in selectedProposals" :key="proposal.proposalId">
+            {{ proposal ? proposal.proposalName : '' }}
+          </li>
+        </ul>
+        <form ref="form" @submit.stop.prevent="handleSubmit">
+          <b-form-group
             :state="dateState"
-            placeholder="24/12/1970"
-            required
-          />
-        </b-form-group>
-      </form>
+            label="To vote for proposals please confirm your CC/DNI expiration dat"
+            label-for="date-input"
+            invalid-feedback="Date is required"
+          >
+            <b-form-input
+              id="date-input"
+              v-model="date"
+              :state="dateState"
+              placeholder="24/12/1970"
+              required
+            />
+          </b-form-group>
+        </form>
+      </div>
+      <div v-else>
+        <p>You have already voted</p>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -46,7 +51,8 @@ export default {
   data() {
     return {
       date: '',
-      dateState: null
+      dateState: null,
+      haveVoted: this.user().voteProposalState
     }
   },
   methods: {
@@ -55,6 +61,9 @@ export default {
     },
     userId() {
       return this.$store.getters['auth/userId']
+    },
+    user() {
+      return this.$store.getters['auth/user']
     },
     userToken() {
       return this.$store.getters['auth/jwt']
